@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Калькулятор лизинга</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+</head>
+<body>
+  <style>
+    /* Твои стили + добавлено немного для нового блока */
+    .slider-value { font-weight: bold; }
+    .calc-wrapper {
+      max-width: 1100px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+    .calc-box {
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      padding: 30px;
+      background-color: #f9f9f9;
+    }
+    .result-box {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .result-box h3 {
+      font-size: 28px;
+      color: #007bff;
+    }
+    .label-small {
+      font-size: 0.9rem;
+      color: #777;
+    }
+    .leasing-form-container {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .leasing-form {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .form-header h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .col, .col-full {
+      flex: 1;
+      min-width: 45%;
+    }
+    .col-full {
+      min-width: 100%;
+    }
+    .form-check {
+      margin-bottom: 10px;
+    }
+    .form-check input {
+      margin-right: 5px;
+    }
+    .btn.w-100 {
+      width: 100%;
+    }
+    .form-text {
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+    .text-danger {
+      color: #dc3545 !important;
+    }
+
+    /* Новый блок выбора */
+    #lease-selection {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 30px;
+      border: 1px solid #007bff;
+      border-radius: 12px;
+      background-color: #f0f8ff;
+    }
+    #lease-selection h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #007bff;
+    }
+    #lease-selection label {
+      font-weight: 600;
+    }
+    #lease-selection .btn {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Блок выбора типа и структуры -->
+  <div id="lease-selection">
+    <h2>Выберите тип лизинга и структуру сделки</h2>
+    <div class="mb-3">
+      <label for="leaseType" class="form-label">Тип лизинга</label>
+      <select id="leaseType" class="form-select">
+        <option value="" disabled selected>Выберите тип</option>
+        <option value="financial">Финансовый</option>
+        <option value="operational">Операционный</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="dealStructure" class="form-label">Структура сделки</label>
+      <select id="dealStructure" class="form-select" disabled>
+        <option value="" disabled selected>Сначала выберите тип лизинга</option>
+      </select>
+    </div>
+    <button id="toCalculatorBtn" class="btn btn-primary w-100" disabled>Далее</button>
+  </div>
+
+  <!-- Скрытый калькулятор, показывается после выбора -->
+  <div class="calc-wrapper" id="calculatorWrapper" style="display:none;">
+    <h1 class="text-center mb-5">Рассчитайте лизинг сельскохозяйственной техники</h1>
+    <button class="btn btn-secondary mb-4" id="backToSelectionBtn">← Назад к выбору типа и структуры</button>
+    <div class="row g-4">
+      <!-- Левая часть с вводом -->
+      <div class="col-md-6">
+        <div class="calc-box">
+          <!-- Стоимость имущества -->
+          <label class="form-label">Стоимость имущества</label>
+          <input type="range" id="price" class="form-range" min="500000" max="50000000" step="100000" value="2500000" />
+          <div class="slider-value" id="priceValue">2 500 000 ₽</div>
+          <div id="priceHint" class="form-text text-danger" style="display:none;">Стоимость должна быть от 500 000 до 50 000 000 ₽</div>
+
+          <!-- Первоначальный взнос -->
+          <label class="form-label mt-4">Первоначальный взнос</label>
+          <input type="range" id="advance" class="form-range" min="0" max="49" value="0" />
+          <div class="slider-value" id="advanceValue">0%</div>
+          <div id="advanceHint" class="form-text text-danger" style="display:none;">
+            Аванс не может быть больше 49%
+          </div>
+
+          <!-- Срок договора -->
+          <label class="form-label mt-4">Срок договора</label>
+          <input type="range" id="term" class="form-range" min="12" max="84" step="12" value="36" />
+          <div class="slider-value" id="termValue">36 месяцев</div>
+          <div id="termHint" class="form-text text-danger" style="display:none;">
+            Срок должен быть от 12 до 84 месяцев и кратен 12
+          </div>
+
+          <!-- Последний платёж -->
+          <label class="form-label mt-4">Последний платёж</label>
+          <input type="range" id="lastPayment" class="form-range" min="0" max="40" value="0" />
+          <div class="slider-value" id="lastPaymentValue">0%</div>
+          <div id="lastPaymentHint" class="form-text text-danger" style="display:none;">
+            Последний платёж не может быть больше 40%
+          </div>
+
+          <!-- Выручка за последний год -->
+          <label class="form-label mt-4">Выручка за последний год</label>
+          <div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="revenue" id="rev1" checked />
+              <label class="form-check-label" for="rev1">0–120 млн</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="revenue" id="rev2" />
+              <label class="form-check-label" for="rev2">120–800 млн</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="revenue" id="rev3" />
+              <label class="form-check-label" for="rev3">800 млн – 2 млрд</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="revenue" id="rev4" />
+              <label class="form-check-label" for="rev4">2–15 млрд</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Правая часть с результатом -->
+      <div class="col-md-6">
+        <div class="result-box text-center">
+          <h3>Ежемесячный платёж:</h3>
+          <div id="monthlyPayment" class="fs-2 mb-3">—</div>
+          <div>Экономия по налогам: <span id="taxSavings" class="text-success fw-bold">—</span></div>
+          <div>Годовое удорожание: <span id="interestRate">15.59%</span></div>
+          <div>Сумма договора: <span id="totalAmount">—</span></div>
+          <button id="submitBtn" class="btn btn-primary mt-4" onclick="openLeasingForm()">Оставить заявку</button>
+        </div>
+        <p class="label-small mt-3">
+          Стоимость предмета лизинга и приведенные расчеты являются предварительными. Для точного расчета обратитесь к специалисту.
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Форма заявки -->
+<div id="leasingForm" class="leasing-form-container" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:9999;">
+  <div class="leasing-form bg-white p-4 rounded" style="max-width:600px; width:90%; box-shadow:0 0 15px rgba(0,0,0,0.3); position:relative;">
+    <div class="form-header d-flex justify-content-between align-items-center mb-3">
+      <h2>Онлайн-заявка на лизинг</h2>
+      <button class="close-btn btn btn-light" onclick="closeLeasingForm()" aria-label="Закрыть">&times;</button>
+    </div>
+    <form id="leasingFormForm" novalidate>
+      <div class="row mb-3">
+        <div class="col">
+          <label for="company" class="form-label">Название компании*</label>
+          <input type="text" class="form-control" id="company" name="company" required />
+        </div>
+        <div class="col">
+          <label for="inn" class="form-label">ИНН компании*</label>
+          <input type="text" class="form-control" id="inn" name="inn" required />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label for="name" class="form-label">Ваше имя*</label>
+          <input type="text" class="form-control" id="name" name="name" placeholder="Как к Вам обращаться?" required />
+        </div>
+        <div class="col">
+          <label for="city" class="form-label">Ваш город*</label>
+          <input type="text" class="form-control" id="city" name="city" placeholder="Укажите город" required />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label for="phone" class="form-label">Ваш контактный телефон*</label>
+          <input type="tel" class="form-control" id="phone" name="phone" placeholder="+7 (000) 000-00-00" required />
+        </div>
+        <div class="col">
+          <label for="email" class="form-label">Электронная почта*</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="Укажите Вашу почту" required />
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="comment" class="form-label">Комментарий</label>
+        <textarea class="form-control" id="comment" name="comment" placeholder="Вы можете оставить комментарий" rows="3"></textarea>
+      </div>
+      <div class="consent mb-3">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="consent" name="consent" required />
+          <label class="form-check-label" for="consent">
+            Нажимая кнопку «Отправить заявку», Вы даёте
+            <a href="#" target="_blank" rel="noopener noreferrer">согласие на обработку персональных данных</a>.
+          </label>
+        </div>
+        <div class="form-check mt-2">
+          <input class="form-check-input" type="checkbox" id="promoConsent" name="promoConsent" />
+          <label class="form-check-label" for="promoConsent">
+            Отправляя форму, Вы соглашаетесь на получение информации об услугах и акциях.
+            Ознакомьтесь <a href="#" target="_blank" rel="noopener noreferrer">здесь</a>.
+          </label>
+        </div>
+      </div>
+      <button class="btn btn-primary w-100" type="submit">Отправить заявку</button>
+    </form>
+  </div>
+</div>
+
+<!-- Скрипт калькулятора и логика -->
+<script>
+  // Инициализация EmailJS — замените на свой User ID
+  (function() {
+    emailjs.init("j0ZrYgypLMuVuBx2S");
+  })();
+
+  // Элементы выбора (пример, если есть в твоем коде)
+  const leaseTypeSelect = document.getElementById('leaseType');
+  const dealStructureSelect = document.getElementById('dealStructure');
+  const toCalculatorBtn = document.getElementById('toCalculatorBtn');
+
+  const leaseSelectionDiv = document.getElementById('lease-selection');
+  const calculatorWrapper = document.getElementById('calculatorWrapper');
+  const backToSelectionBtn = document.getElementById('backToSelectionBtn');
+
+  const priceInput = document.getElementById('price');
+  const priceValue = document.getElementById('priceValue');
+  const advanceInput = document.getElementById('advance');
+  const advanceValue = document.getElementById('advanceValue');
+  const termInput = document.getElementById('term');
+  const termValue = document.getElementById('termValue');
+  const lastPaymentInput = document.getElementById('lastPayment');
+  const lastPaymentValue = document.getElementById('lastPaymentValue');
+
+  const advanceHint = document.getElementById('advanceHint');
+  const lastPaymentHint = document.getElementById('lastPaymentHint');
+
+  const monthlyPaymentElem = document.getElementById('monthlyPayment');
+  const taxSavingsElem = document.getElementById('taxSavings');
+  const interestRateElem = document.getElementById('interestRate');
+  const totalAmountElem = document.getElementById('totalAmount');
+
+  let maxAdvancePercent = 49;
+  let maxLastPaymentPercent = 40;
+  let interestRate = 0.1559;
+
+  const dealStructuresByLeaseType = {
+    financial: [
+      { value: 'clean', label: 'Чистый' },
+      { value: 'wet', label: 'Мокрый' },
+      { value: 'partial', label: 'Частичный' },
+    ],
+    operational: [
+      { value: 'clean', label: 'Чистый' },
+      { value: 'wet', label: 'Мокрый' },
+    ],
+  };
+
+  const parametersByTypeAndStructure = {
+    financial: {
+      clean: { maxAdvance: 49, maxLastPayment: 40, interestRate: 0.1559 },
+      wet: { maxAdvance: 40, maxLastPayment: 30, interestRate: 0.135 },
+      partial: { maxAdvance: 45, maxLastPayment: 35, interestRate: 0.145 },
+    },
+    operational: {
+      clean: { maxAdvance: 30, maxLastPayment: 20, interestRate: 0.12 },
+      wet: { maxAdvance: 35, maxLastPayment: 25, interestRate: 0.13 },
+    }
+  };
+
+  if (leaseTypeSelect) {
+    leaseTypeSelect.addEventListener('change', () => {
+      const selectedType = leaseTypeSelect.value;
+      dealStructureSelect.innerHTML = '';
+      if (!selectedType) {
+        dealStructureSelect.disabled = true;
+        dealStructureSelect.innerHTML = '<option disabled selected>Сначала выберите тип лизинга</option>';
+        toCalculatorBtn.disabled = true;
+        return;
+      }
+      dealStructureSelect.disabled = false;
+      const options = dealStructuresByLeaseType[selectedType];
+      dealStructureSelect.innerHTML = '<option disabled selected>Выберите структуру сделки</option>';
+      options.forEach(opt => {
+        const optionElem = document.createElement('option');
+        optionElem.value = opt.value;
+        optionElem.textContent = opt.label;
+        dealStructureSelect.appendChild(optionElem);
+      });
+      toCalculatorBtn.disabled = true;
+    });
+  }
+
+  if (dealStructureSelect) {
+    dealStructureSelect.addEventListener('change', () => {
+      toCalculatorBtn.disabled = !dealStructureSelect.value;
+    });
+  }
+
+  if (toCalculatorBtn) {
+    toCalculatorBtn.addEventListener('click', () => {
+      const type = leaseTypeSelect.value;
+      const structure = dealStructureSelect.value;
+      if (!type || !structure) return;
+
+      const params = parametersByTypeAndStructure[type][structure];
+      maxAdvancePercent = params.maxAdvance;
+      maxLastPaymentPercent = params.maxLastPayment;
+      interestRate = params.interestRate;
+
+      advanceInput.max = maxAdvancePercent;
+      lastPaymentInput.max = maxLastPaymentPercent;
+
+      if (+advanceInput.value > maxAdvancePercent) advanceInput.value = maxAdvancePercent;
+      if (+lastPaymentInput.value > maxLastPaymentPercent) lastPaymentInput.value = maxLastPaymentPercent;
+
+      advanceValue.textContent = advanceInput.value + '%';
+      lastPaymentValue.textContent = lastPaymentInput.value + '%';
+      interestRateElem.textContent = (interestRate * 100).toFixed(2) + '%';
+
+      leaseSelectionDiv.style.display = 'none';
+      calculatorWrapper.style.display = 'block';
+
+      recalc();
+    });
+  }
+
+  if (backToSelectionBtn) {
+    backToSelectionBtn.addEventListener('click', () => {
+      calculatorWrapper.style.display = 'none';
+      leaseSelectionDiv.style.display = 'block';
+    });
+  }
+
+  function formatRubles(value) {
+    return value.toLocaleString('ru-RU') + ' ₽';
+  }
+
+  if (priceInput) priceInput.addEventListener('input', () => {
+    priceValue.textContent = formatRubles(+priceInput.value);
+    recalc();
+  });
+  if (advanceInput) advanceInput.addEventListener('input', () => {
+    advanceValue.textContent = advanceInput.value + '%';
+    recalc();
+  });
+  if (termInput) termInput.addEventListener('input', () => {
+    termValue.textContent = termInput.value + ' месяцев';
+    recalc();
+  });
+  if (lastPaymentInput) lastPaymentInput.addEventListener('input', () => {
+    lastPaymentValue.textContent = lastPaymentInput.value + '%';
+    recalc();
+  });
+
+  const revenueRadios = document.querySelectorAll('input[name="revenue"]');
+  revenueRadios.forEach(radio => {
+    radio.addEventListener('change', recalc);
+  });
+
+  function recalc() {
+    const price = +priceInput.value;
+    const advancePercent = +advanceInput.value;
+    const term = +termInput.value;
+    const lastPaymentPercent = +lastPaymentInput.value;
+
+    if(advanceHint) advanceHint.style.display = advancePercent > maxAdvancePercent ? 'block' : 'none';
+    if(lastPaymentHint) lastPaymentHint.style.display = lastPaymentPercent > maxLastPaymentPercent ? 'block' : 'none';
+
+    if (advancePercent > maxAdvancePercent || lastPaymentPercent > maxLastPaymentPercent) {
+      monthlyPaymentElem.textContent = '—';
+      taxSavingsElem.textContent = '—';
+      totalAmountElem.textContent = '—';
+      return;
+    }
+
+    let taxSavingsPercent = 0.15;
+    if (document.getElementById('rev2')?.checked) taxSavingsPercent = 0.13;
+    else if (document.getElementById('rev3')?.checked) taxSavingsPercent = 0.10;
+    else if (document.getElementById('rev4')?.checked) taxSavingsPercent = 0.08;
+
+    const financedAmount = price * (1 - advancePercent / 100);
+    const lastPaymentAmount = price * (lastPaymentPercent / 100);
+    const totalInterest = financedAmount * interestRate * (term / 12);
+    const monthlyPayment = (financedAmount - lastPaymentAmount + totalInterest) / term;
+    const totalAmount = price + totalInterest;
+    const taxSavings = price * taxSavingsPercent;
+
+    monthlyPaymentElem.textContent = formatRubles(Math.round(monthlyPayment));
+    taxSavingsElem.textContent = formatRubles(Math.round(taxSavings));
+    totalAmountElem.textContent = formatRubles(Math.round(totalAmount));
+  }
+
+  // Инициализация значений при загрузке
+  if(priceInput) priceValue.textContent = formatRubles(+priceInput.value);
+  if(advanceInput) advanceValue.textContent = advanceInput.value + '%';
+  if(termInput) termValue.textContent = termInput.value + ' месяцев';
+  if(lastPaymentInput) lastPaymentValue.textContent = lastPaymentInput.value + '%';
+
+  // Форма заявки — логика отправки через EmailJS и валидация
+  const leasingFormContainer = document.getElementById('leasingForm');
+  const leasingFormForm = document.getElementById('leasingFormForm');
+
+  function openLeasingForm() {
+    leasingFormContainer.style.display = 'flex';
+  }
+
+  function closeLeasingForm() {
+    leasingFormContainer.style.display = 'none';
+  }
+
+  leasingFormForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const inputs = leasingFormForm.querySelectorAll('input');
+    let isValid = true;
+    let firstInvalid = null;
+
+    inputs.forEach(input => {
+      const value = input.value.trim();
+      const type = input.type;
+
+      if (input.previousElementSibling?.textContent?.includes('ИНН')) {
+        if (!/^\d{10}(\d{2})?$/.test(value)) {
+          input.setCustomValidity("Введите корректный ИНН (10 или 12 цифр)");
+          isValid = false;
+          if (!firstInvalid) firstInvalid = input;
+        } else {
+          input.setCustomValidity("");
+        }
+      }
+      else if (type === "email") {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          input.setCustomValidity("Введите корректный email");
+          isValid = false;
+          if (!firstInvalid) firstInvalid = input;
+        } else {
+          input.setCustomValidity("");
+        }
+      }
+      else if (type === "tel") {
+        if (!/^\+7\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/.test(value)) {
+          input.setCustomValidity("Введите корректный телефон в формате +7 (xxx) xxx-xx-xx");
+          isValid = false;
+          if (!firstInvalid) firstInvalid = input;
+        } else {
+          input.setCustomValidity("");
+        }
+      }
+      else if (input.required && !value) {
+        input.setCustomValidity("Заполните это поле");
+        isValid = false;
+        if (!firstInvalid) firstInvalid = input;
+      } else {
+        input.setCustomValidity("");
+      }
+    });
+
+    if (!isValid) {
+      firstInvalid?.reportValidity();
+      return;
+    }
+
+    // Отправка через EmailJS — замените Service ID и Template ID
+    emailjs.sendForm('Заявка на лизинг', 'template_a2rbvcc', '#leasingFormForm')
+      .then(() => {
+        alert('Заявка успешно отправлена! Спасибо.');
+        leasingFormForm.reset();
+        closeLeasingForm();
+      }, (error) => {
+        alert('Ошибка отправки заявки. Попробуйте позже.');
+        console.error('EmailJS error:', error);
+      });
+  });
+</script>
+
+<script src="js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

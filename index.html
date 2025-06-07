@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Лизинг Сельхозтехники</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/vendor.css" />
+</head>
+<body>
+  <!-- Навигация -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="#">Лизинг Сельхоз</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Переключатель навигации"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="tractors.html">Тракторы</a></li>
+          <li class="nav-item"><a class="nav-link" href="harvesters.html">Комбайны</a></li>
+          <li class="nav-item"><a class="nav-link" href="sprayers.html">Опрыскиватели</a></li>
+          <li class="nav-item"><a class="nav-link" href="calculator.html#leasing-calculator">Калькулятор</a></li>
+          <li class="nav-item"><a class="nav-link" href="#news">Новости</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">О компании</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Контакты</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- Баннер -->
+  <section class="hero bg-dark text-white text-center p-5">
+    <div class="container">
+      <h1 class="display-4">Лизинг сельскохозяйственной техники</h1>
+      <p class="lead">Современная техника с удобной схемой финансирования</p>
+      <a href="calculator.html" class="btn btn-primary btn-lg">Рассчитать платёж</a>
+    </div>
+  </section>
+
+  <!-- Техника -->
+  <section id="services" class="container py-5">
+    <h2 class="text-center mb-4">Категории техники</h2>
+    <div class="row">
+      <div class="col-md-4 text-center">
+        <a href="tractors.html" class="text-decoration-none text-dark">
+          <img src="images/tractor.jpg" class="img-fluid card-img-fixed mb-3" alt="Тракторы" />
+          <h5>Тракторы</h5>
+        </a>
+      </div>
+      <div class="col-md-4 text-center">
+        <a href="harvesters.html" class="text-decoration-none text-dark">
+          <img src="images/harvester.jpg" class="img-fluid card-img-fixed mb-3" alt="Комбайны" />
+          <h5>Комбайны</h5>
+        </a>
+      </div>
+      <div class="col-md-4 text-center">
+        <a href="sprayers.html" class="text-decoration-none text-dark">
+          <img src="images/sprayer.jpg" class="img-fluid card-img-fixed mb-3" alt="Опрыскиватели" />
+          <h5>Опрыскиватели</h5>
+        </a>
+      </div>
+    </div>
+  </section>
+
+<!-- Новости -->
+<section id="news" class="container py-5">
+  <h2 class="text-center mb-4">Новости и акции</h2>
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Поступление тракторов Case IH Magnum из США</h5>
+      <p>Надежные и мощные модели для различных сельскохозяйственных работ.</p>
+    </div>
+    <div class="col-md-4">
+      <h5>Новое поступление John Deere</h5>
+      <p>В наличии комбайны и тракторы с выгодными условиями.</p>
+    </div>
+    <div class="col-md-4">
+      <h5>Успешное завершение испытаний энергоэффективных двигателей</h5>
+      <p>Наши партнеры представили новые модели с улучшенным расходом топлива.</p>
+    </div>
+  </div>
+</section>
+
+  <!-- О компании -->
+  <section id="about" class="bg-light py-5">
+    <div class="container">
+      <h2 class="text-center mb-4">О компании</h2>
+      <p class="text-center">
+        Мы являемся крупным поставщиком сельскохозяйственной техники, предлагая полный спектр услуг по лизингу и технической поддержке. За годы работы на рынке мы наладили прямое сотрудничество с ведущими заводами-изготовителями и банками, обеспечивая нашим клиентам гибкие условия и индивидуальный подход.
+      </p>
+    </div>
+  </section>
+
+  <!-- Контакты -->
+  <section id="contact" class="container py-5">
+    <h2 class="text-center mb-4">Свяжитесь с нами</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center">
+        <p><strong>Горячая линия:</strong><br><a href="tel:88005555556">+7 (964) 288-33-38</a><br><span class="text-muted">Для звонков по России</span></p>
+        <p><strong>Email:</strong><br><a href="mailto:help-vypiska@ya.ru">help-vypiska@ya.ru</a></p>
+      </div>
+    </div>
+  </section>
+
+  <style>
+  /* Стиль для секции Новости */
+  #news {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+    padding: 40px 20px;
+  }
+
+  /* Карточки новостей */
+  #news .col-md-4 {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.08);
+    transition: box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  #news .col-md-4:hover {
+    box-shadow: 0 6px 16px rgb(0 0 0 / 0.15);
+  }
+
+  /* Заголовки новостей */
+  #news h5 {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #2c3e50;
+  }
+
+  /* Текст новостей */
+  #news p {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-bottom: 0;
+  }
+</style>
+
+  <!-- Партнёры с автопрокруткой -->
+<style>
+  .partner-slider {
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .partner-slider-track {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll 30s linear infinite;
+  }
+
+  .partner-slider-track a {
+    display: inline-block;
+    margin: 0 40px;
+  }
+
+  .partner-slider-track img {
+    width: 120px;
+    height: 60px;
+    object-fit: contain;
+    vertical-align: middle;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+  }
+
+  .partner-slider-track img:hover {
+    filter: grayscale(0%);
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+</style>
+
+<section class="bg-white py-5 border-top">
+  <div class="container">
+    <h2 class="text-center mb-4">Наши партнёры</h2>
+    <div class="partner-slider">
+      <div class="partner-slider-track">
+        <a href="https://www.sberleasing.ru/" target="_blank">
+          <img src="images/sber.png" alt="Сбербанк">
+        </a>
+        <a href="https://www.vtbl.ru/personal/leasing/" target="_blank">
+          <img src="images/vtb.png" alt="ВТБ">
+        </a>
+        <a href="https://www.gpbl.ru/" target="_blank">
+          <img src="images/gpb.png" alt="Газпромбанк">
+        </a>
+        <a href="https://alfaleasing.ru/" target="_blank">
+          <img src="images/alfa.png" alt="Альфа-Банк">
+        </a>
+        <a href="https://rosbankleasing.ru/" target="_blank">
+          <img src="images/rosbank.png" alt="Росбанк">
+        </a>
+
+        <!-- Повтор логотипов -->
+        <a href="https://www.sberleasing.ru/" target="_blank">
+          <img src="images/sber.png" alt="Сбербанк">
+        </a>
+        <a href="https://www.vtbl.ru/personal/leasing/" target="_blank">
+          <img src="images/vtb.png" alt="ВТБ">
+        </a>
+        <a href="https://www.gpbl.ru/" target="_blank">
+          <img src="images/gpb.png" alt="Газпромбанк">
+        </a>
+        <a href="https://alfaleasing.ru/" target="_blank">
+          <img src="images/alfa.png" alt="Альфа-Банк">
+        </a>
+        <a href="https://rosbankleasing.ru/" target="_blank">
+          <img src="images/rosbank.png" alt="Росбанк">
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <!-- Футер -->
+  <footer class="bg-dark text-white text-center p-3">
+    <div class="container">© 2025 Лизинг Сельхозтехники</div>
+  </footer>
+
+  <!-- Скрипт калькулятора -->
+  <script>
+    document.getElementById('leasing-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const price = +document.getElementById('price').value;
+      const advance = +document.getElementById('advance').value;
+      const term = +document.getElementById('term').value;
+      if (price <= 0 || advance < 0 || advance > 100 || term <= 0) {
+        document.getElementById('result').textContent = 'Введите корректные значения.';
+        return;
+      }
+      const initialPayment = price * (advance / 100);
+      const financedAmount = price - initialPayment;
+      const monthly = (financedAmount / (term * 12)).toFixed(0);
+      document.getElementById('result').textContent = `Ежемесячный платёж: ₽${monthly}`;
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
