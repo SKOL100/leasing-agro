@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Лизинг Сельхозтехники</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/vendor.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding: 40px;
+    }
+    .stats-box {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .stats-box h2 {
+      margin-bottom: 30px;
+    }
+    .stat {
+      font-size: 1.3rem;
+      margin: 25px 0;
+    }
+    input[type="number"] {
+      width: 120px;
+      padding: 5px;
+      font-size: 1rem;
+      text-align: center;
+    }
+    button {
+      margin-left: 10px;
+      padding: 5px 15px;
+    }
+  </style>
+</head>
+<body>
+
+      <!-- Навигация -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="#">Лизинг Сельхоз</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Переключатель навигации">
+        <span class="navbar-toggler-icon"></span>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Переключатель навигации"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="tractors.html">Тракторы</a></li>
+          <li class="nav-item"><a class="nav-link" href="harvesters.html">Комбайны</a></li>
+          <li class="nav-item"><a class="nav-link" href="sprayers.html">Опрыскиватели</a></li>
+          <li class="nav-item"><a class="nav-link" href="calculator.html#leasing-calculator">Калькулятор</a></li>
+          <li class="nav-item"><a class="nav-link" href="#news">Новости</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">О компании</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Контакты</a></li>
+          <li class="nav-item"><a class="nav-link" href="stats.html">Статистика</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <div class="stats-box">
+    <h2>📊 Статистика сайта</h2>
+
+    <div class="stat">
+      👥 Посетителей сегодня:
+      <input type="number" id="visitsInput" min="0" />
+      <button onclick="saveVisitors()">Сохранить</button>
+    </div>
+
+    <div class="stat">
+      📩 Отправлено заявок:
+      <input type="number" id="requestsInput" min="0" />
+      <button onclick="saveRequests()">Сохранить</button>
+    </div>
+  </div>
+
+  <script>
+    // Загрузка значений из localStorage
+    document.getElementById('visitsInput').value = localStorage.getItem('visitorsToday') || '';
+    document.getElementById('requestsInput').value = localStorage.getItem('requestsToday') || '';
+
+    // Сохранение посещений
+    function saveVisitors() {
+      const value = document.getElementById('visitsInput').value;
+      localStorage.setItem('visitorsToday', value);
+      alert('Количество посетителей сохранено!');
+    }
+
+    // Сохранение заявок
+    function saveRequests() {
+      const value = document.getElementById('requestsInput').value;
+      localStorage.setItem('requestsToday', value);
+      alert('Количество заявок сохранено!');
+    }
+  </script>
+
+</body>
+</html>
