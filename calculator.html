@@ -539,22 +539,6 @@
       firstInvalid?.reportValidity();
       return;
     }
-
-    // Отправка через EmailJS — замените Service ID и Template ID
-    emailjs.sendForm('Заявка на лизинг', 'template_a2rbvcc', '#leasingFormForm')
-      .then(() => {
-        alert('Заявка успешно отправлена! Спасибо.');
-        leasingFormForm.reset();
-        closeLeasingForm();
-      }, (error) => {
-        alert('Ошибка отправки заявки. Попробуйте позже.');
-        console.error('EmailJS error:', error);
-        gtag('event', 'form_submit', {
-  'event_category': 'form',
-  'event_label': 'leasing_request'
-});
-
-      });
   });
 </script>
 
